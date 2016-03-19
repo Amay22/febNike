@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -23,50 +24,51 @@ import nike.exception.UserUnathorizedException;
 import nike.service.RatingsService;
 
 @RestController
-@RequestMapping("/rating")
-@Api(tags="rating")
+@RequestMapping("/ratings")
+@Api(tags="ratings")
 public class RatingsController {
 
 	@Autowired
 	@Qualifier("ratingsServiceImpl")
 	private RatingsService ratingsServiceImpl;
 
-	@RequestMapping(value = "{titleId}/{userId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/titleuser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Create Rating", notes="Create and return Rating")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Ratings addRating(@PathVariable("titleId") int titleId, @PathVariable("userId") int userId, 
-			@RequestBody Ratings r) throws UserUnathorizedException, TitleNotFoundException, RatingBadRequestException {
-		return this.ratingsServiceImpl.addRating(userId, titleId, r);
+	public Ratings addRating(@RequestParam(required=true,value="titleId") int titleId, 
+			@RequestParam(required=true,value="userId") int userId, 
+			@RequestBody Ratings rating) throws UserUnathorizedException, TitleNotFoundException, RatingBadRequestException {
+		return this.ratingsServiceImpl.addRating(userId, titleId, rating);
 	}
 
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Rating By User Id", notes="Finds Rating of a particular User using their Id")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Ratings> getRatingForUser(@PathVariable("userId") int userId)
+	public List<Ratings> getRatingForUser(@RequestParam(required=true,value="userId") int userId)
 			throws UserUnathorizedException, UserNotFoundException {
 		return this.ratingsServiceImpl.getRatingByUser(userId);
 	}
 
-	@RequestMapping(value = "/title/{titleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/title",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Rating for a Title", notes="Finds Rating of a particular Title using their Id")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Ratings> getRatingForTitle(@PathVariable("titleId") int titleId)
+	public List<Ratings> getRatingForTitle(@RequestParam(required=true,value="titleId") int titleId)
 			throws TitleNotFoundException {
 		return this.ratingsServiceImpl.getRatingByTitle(titleId);
 	}
 
-	@RequestMapping(value = "{titleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/average", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Calcualtes Average Rating of a Title", notes="Returns Double value")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Double getAvgRatingForTitle(@PathVariable("titleId") int titleId)
+	public Double getAvgRatingForTitle(@RequestParam(required=true,value="titleId") int titleId)
 			throws TitleNotFoundException {
 		return this.ratingsServiceImpl.getAverageRatingForTitle(titleId);
 	}

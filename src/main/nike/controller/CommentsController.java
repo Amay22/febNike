@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -31,57 +32,56 @@ public class CommentsController {
 	@Qualifier("commentsServiceImpl")
 	private CommentsService commentsService;
 
-	@RequestMapping(value = "{titleId}/{userId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/new", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Create Comments", notes="Create and return Comments")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Comments addComments(@PathVariable("titleId") int titleId,
-			@PathVariable("userId") int userId, @RequestBody Comments c)
+	public Comments addComments(@RequestParam(required=true,value="titleId") int titleId,
+			@RequestParam(required=true,value="userId") int userId, @RequestBody Comments comment)
 			throws UserNotFoundException, TitleNotFoundException, CommentBadRequestException {
-		return this.commentsService.addComments(titleId, userId, c);
+		return this.commentsService.addComments(titleId, userId, comment);
 	}
 
-	@RequestMapping(value = "{titleId}/{userId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Update Comment", notes="Update an existing Comment")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Comments updateComments(@PathVariable("titleId") int titleId,
-			@PathVariable("userId") int userId, @RequestBody Comments c)
+	public Comments updateComments(@RequestParam(required=true,value="titleId") int titleId,
+			@RequestParam(required=true,value="userId") int userId, @RequestBody Comments comment)
 			throws UserUnathorizedException, CommentBadRequestException, TitleNotFoundException ,UserNotFoundException{
-		return this.commentsService.updateComment(titleId, userId, c);
+		return this.commentsService.updateComment(titleId, userId, comment);
 	}
 
-	@RequestMapping(value = "{titleId}/{userId}/{commentId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Delete Comment", notes="Delete an existing Comment")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public Comments deleteComments(@PathVariable("titleId") int titleId,
-			@PathVariable("userId") int userId,
-			@PathVariable("commentId") int commentId) 
+	public Comments deleteComments(@RequestParam(required=true,value="titleId") int titleId,
+			@RequestParam(required=true,value="userId") int userId,
+			@RequestParam(required=true,value="commentId") int commentId) 
 					throws UserUnathorizedException, UserNotFoundException, CommentBadRequestException, TitleNotFoundException{
 		return this.commentsService.removeComments(titleId, userId, commentId);
 	}
 
-	@RequestMapping(value = "/title/{titleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/title",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Rating By Title Id", notes="Finds Rating of a particular Title using their Id")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Comments> getCommentsForTitle(
-			@PathVariable("titleId") int titleId) throws TitleNotFoundException {
+	public List<Comments> getCommentsForTitle(@RequestParam(required=true,value="titleId") int titleId) throws TitleNotFoundException {
 		return this.commentsService.getCommentsForTitle(titleId);
 	}
 
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/user",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Rating By User Id", notes="Finds Rating of a particular User using their Id")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Comments> getCommentsForUser(@PathVariable("userId") int userId)
+	public List<Comments> getCommentsForUser(@RequestParam(required=true,value="userId") int userId)
 			throws UserNotFoundException, UserUnathorizedException {
 		return this.commentsService.getCommentsForUser(userId);
 	}
