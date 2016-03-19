@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
 @Component
 @Entity
-@Table(name="Title")
+@Table(name="Titles")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Title {
