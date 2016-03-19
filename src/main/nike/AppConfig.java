@@ -17,12 +17,4 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
-    
-    public void addCorsMappings(CorsRegistry registry) {
-    	registry.addMapping("/*")
-		.allowedOrigins("*")
-		.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-		.allowCredentials(false).
-		maxAge(3600);
-    }
 }

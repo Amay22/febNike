@@ -38,7 +38,7 @@ public class JPAConfig {
 	public DataSource dataSource () {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/febnike1");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/febnike");
 		dataSource.setUsername("root");
 		dataSource.setPassword("rooter");
 		return dataSource;
@@ -54,10 +54,8 @@ public class JPAConfig {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 		properties.put("hibernate.show_sql", "true");
-		properties.put("hibernate.hbm2ddl.auto", "create-drop");
 		properties.put("hibernate.format_sql", "true");
 		properties.put("hibernate.enable_lazy_load_no_trans", "true");
 		return properties;
 	}
-	
 }
