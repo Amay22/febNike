@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserService {
 
 	List<User> findAllUsers();
+	
+	User login(String email, String password) throws UserNotFoundException;
 
 	User findUserById(int id) throws UserNotFoundException;
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAllUsers() {
 		return userDAO.findAllUsers();
+	}
+	
+	@Override
+	public User login(String email, String password)throws UserNotFoundException {
+		User user = findUserByEmail(email);
+		if(user == null) {
+			throw new UserNotFoundException();
+		}else if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+			return user;
+		}
+		return null;
 	}
 
 	@Override
@@ -50,6 +62,8 @@ public class UserServiceImpl implements UserService {
 	public User createUser(User user) throws UserAlreadyExistsException {
 		User existing =  userDAO.findUserByEmail(user.getEmail());
 		if(existing == null) {
+			// Password salting
+			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 			return userDAO.createUser(user);
 		}else{
 			throw new UserAlreadyExistsException();
