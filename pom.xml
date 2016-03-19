@@ -75,6 +75,12 @@
       <artifactId>spring-orm</artifactId>
       <version>4.2.4.RELEASE</version>
     </dependency>
+    
+     <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.5.1</version>
+    </dependency>
 
     <!-- Hibernate -->
     <dependency>
@@ -111,5 +117,13 @@
       <version>4.2.4.RELEASE</version>
       <scope>test</scope>
     </dependency>
+    
+    <!-- JBCrypt -->
+	<dependency>
+		<groupId>de.svenkubiak</groupId>
+		<artifactId>jBCrypt</artifactId>
+		<version>0.4.1</version>
+	</dependency>
+    
   </dependencies>
 </project>
