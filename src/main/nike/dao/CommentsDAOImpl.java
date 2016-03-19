@@ -45,21 +45,21 @@ public class CommentsDAOImpl implements CommentsDAO {
 
 	@Override
 	public List<Comments> getCommentsForTitle(int titleId) {
-		return (List<Comments>) em.createQuery("SELECT * FROM Comments WHERE title_Id = :titleId").setParameter("titleId", titleId).getResultList();
+		return (List<Comments>) em.createQuery("FROM Comments WHERE title_Id = :titleId").setParameter("titleId", titleId).getResultList();
 	}
 
 	@Override
 	public List<Comments> getCommentsForUser(int userId) {
-		return (List<Comments>) em.createQuery("SELECT * FROM Comments WHERE user_Id = :userId").setParameter("userId", userId).getResultList();		
+		return (List<Comments>) em.createQuery("FROM Comments WHERE user_Id = :userId").setParameter("userId", userId).getResultList();		
 	}
 
 	@Override
 	public void removeCommentsForUser(int userId) {
-		em.createQuery("DELETE FROM Comments WHERE user_Id = :userId").setParameter("userId", userId);
+		em.createQuery("DELETE Comments WHERE user_Id = :userId").setParameter("userId", userId);
 	}
 
 	@Override
 	public void removeCommentsForTitle(int titleId) {
-		em.createQuery("DELETE FROM Comments WHERE title_Id = :titleId").setParameter("titleId", titleId);
+		em.createQuery("DELETE Comments WHERE title_Id = :titleId").setParameter("titleId", titleId);
 	}
 }

@@ -27,31 +27,31 @@ public class RatingsDAOImpl implements RatingsDAO {
 
 	@Override
 	public List<Ratings> getRatingByUser(int userId) {
-		return (List<Ratings>) em.createQuery("SELECT * FROM Rating WHERE user_Id = :userId").setParameter("userId", userId).getResultList();
+		return (List<Ratings>) em.createQuery("FROM Ratings WHERE user_Id = :userId").setParameter("userId", userId).getResultList();
 	}
 
 	@Override
 	public List<Ratings> getRatingByTitle(int titleId) {
-		return (List<Ratings>) em.createQuery("SELECT * FROM Rating WHERE title_id = :titleId").setParameter("titleId", titleId).getResultList();
+		return (List<Ratings>) em.createQuery("FROM Ratings WHERE title_id = :titleId").setParameter("titleId", titleId).getResultList();
 	}
 
 	@Override
 	public double getAverageRatingForTitle(int titleId) {
-		return (double) em.createQuery("SELECT AVG(rating) FROM Rating WHERE title_id = :titleId").setParameter("titleId", titleId).getFirstResult();
+		return (double) em.createQuery("AVG(rating) FROM Ratings WHERE title_id = :titleId").setParameter("titleId", titleId).getFirstResult();
 	}
 	
 	@Override
 	public List<Ratings> getTopRatedTitle() {
-		return (List<Ratings>) em.createQuery("SELECT * FROM Rating WHERE ORDER BY rating DESC LIMIT 10").getResultList();
+		return (List<Ratings>) em.createQuery("FROM Ratings ORDER BY rating DESC").getResultList();
 	}
 	
 	@Override
 	public void removeRatingForUser(int userId) {
-		em.createQuery("DELETE FROM Rating WHERE user_Id = :userId").setParameter("userId", userId);
+		em.createQuery("DELETE Ratings WHERE user_Id = :userId").setParameter("userId", userId);
 	}
 	
 	@Override
 	public void removeRatingForTitle(int titleId) {		
-		em.createQuery("DELETE FROM Rating WHERE title_Id = :titleId").setParameter("titleId", titleId);
+		em.createQuery("DELETE Ratings WHERE title_Id = :titleId").setParameter("titleId", titleId);
 	}
 }
