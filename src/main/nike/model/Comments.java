@@ -33,11 +33,13 @@ public class Comments {
 	private String comments;
 	
 	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "title_Id", nullable = false)
 	private Title title;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	
+	@JsonIgnore
+	@ManyToOne
 	@JoinColumn(name = "user_Id", nullable = false)
 	private User user;
 

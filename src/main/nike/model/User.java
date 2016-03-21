@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "User")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@NamedQueries(@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u WHERE u.email = :pEmail"))
+//@NamedQueries(@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u WHERE u.email = :pEmail"))
 public class User {
 	
 	@Id

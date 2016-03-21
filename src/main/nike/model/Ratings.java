@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Component
 @Entity
-@Table(name="Ratings")
+@Table(name="Ratings", uniqueConstraints=@UniqueConstraint(columnNames = {"title_Id", "user_Id"}))
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Ratings {
