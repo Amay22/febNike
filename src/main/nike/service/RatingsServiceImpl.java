@@ -56,12 +56,16 @@ public class RatingsServiceImpl implements RatingsService {
 	}
 
 	@Override
-	public List<Ratings> getRatingByUser(int userId) throws UserNotFoundException {
+	public Ratings getRatingByUser(int userId, int titleId) throws UserNotFoundException , TitleNotFoundException{
 		User user = userDAO.findUserById(userId);
+		Title title = titleDAO.getTitleById(titleId);
+		if (title == null) {
+			throw new TitleNotFoundException();
+		}
 		if (user == null) {
 			throw new UserNotFoundException();
 		}
-		return ratingDAO.getRatingByUser(userId);
+		return ratingDAO.getRatingByUser(userId , titleId);
 	}
 
 	@Override
@@ -74,7 +78,7 @@ public class RatingsServiceImpl implements RatingsService {
 	}
 
 	@Override
-	public Double getAverageRatingForTitle(int titleId) throws TitleNotFoundException {
+	public int getAverageRatingForTitle(int titleId) throws TitleNotFoundException {
 		Title title = titleDAO.getTitleById(titleId);
 		if (title == null) {
 			throw new TitleNotFoundException();			
@@ -83,7 +87,7 @@ public class RatingsServiceImpl implements RatingsService {
 	}
 
 	@Override
-	public List<Ratings> getTopRatedTitle() {
+	public List<Title> getTopRatedTitle() {
 		return ratingDAO.getTopRatedTitle();
 	}
 }
