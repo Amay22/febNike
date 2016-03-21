@@ -16,7 +16,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import nike.model.Comments;
 import nike.model.Ratings;
+import nike.model.Title;
 import nike.exception.RatingBadRequestException;
 import nike.exception.TitleNotFoundException;
 import nike.exception.UserNotFoundException;
@@ -32,43 +34,42 @@ public class RatingsController {
 	@Qualifier("ratingsServiceImpl")
 	private RatingsService ratingsServiceImpl;
 
-	@RequestMapping(value = "/titleuser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/new/{titleId}/{userId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Create Rating", notes="Create and return Rating")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Ratings addRating(@RequestParam(required=true,value="titleId") int titleId, 
-			@RequestParam(required=true,value="userId") int userId, 
+	public Ratings addRating(@PathVariable("titleId") int titleId,@PathVariable("userId") int userId,
 			@RequestBody Ratings rating) throws UserUnathorizedException, TitleNotFoundException, RatingBadRequestException {
 		return this.ratingsServiceImpl.addRating(userId, titleId, rating);
 	}
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{titleId}/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Rating By User Id", notes="Finds Rating of a particular User using their Id")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Ratings> getRatingForUser(@RequestParam(required=true,value="userId") int userId)
-			throws UserUnathorizedException, UserNotFoundException {
-		return this.ratingsServiceImpl.getRatingByUser(userId);
+	public Ratings getRatingForUser(@PathVariable("titleId") int titleId, @PathVariable("userId") int userId)
+			throws UserUnathorizedException, UserNotFoundException , TitleNotFoundException{
+		return this.ratingsServiceImpl.getRatingByUser(userId, titleId);
 	}
 
-	@RequestMapping(value = "/title",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/title/{titleId}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Rating for a Title", notes="Finds Rating of a particular Title using their Id")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Ratings> getRatingForTitle(@RequestParam(required=true,value="titleId") int titleId)
+	public List<Ratings> getRatingForTitle(@PathVariable("id") int titleId)
 			throws TitleNotFoundException {
 		return this.ratingsServiceImpl.getRatingByTitle(titleId);
 	}
 
-	@RequestMapping(value = "/average", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/average/{titleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Calcualtes Average Rating of a Title", notes="Returns Double value")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Double getAvgRatingForTitle(@RequestParam(required=true,value="titleId") int titleId)
+	public int getAvgRatingForTitle(@PathVariable("titleId") int titleId)
 			throws TitleNotFoundException {
 		return this.ratingsServiceImpl.getAverageRatingForTitle(titleId);
 	}
@@ -78,7 +79,7 @@ public class RatingsController {
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Ratings> getTopRatedTitle(){
+	public List<Title> getTopRatedTitle(){
 		return this.ratingsServiceImpl.getTopRatedTitle();
 	}
 

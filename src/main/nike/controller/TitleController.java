@@ -39,12 +39,12 @@ public class TitleController {
 		return titleService.listTitles();
 	}
 	
-	@RequestMapping(value="/id",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/{id}",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Title By Id", notes="Returns a Title by it's id if it exists.")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title getTitleById(@RequestParam(required=true,value="id") int id) throws TitleNotFoundException{
+	public Title getTitleById(@PathVariable("id") int id) throws TitleNotFoundException{
 		return titleService.getTitleById(id);
 	}
 
@@ -67,48 +67,48 @@ public class TitleController {
 		return titleService.updateTitle(title);
 	}
 	
-	@RequestMapping(value="/delete",method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/delete/{id}",method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Delete Title", notes="Delete an existing Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title deleteTitleById(@RequestParam(required=true,value="id") int id) throws TitleNotFoundException{
+	public Title deleteTitleById(@PathVariable("id") int id) throws TitleNotFoundException{
 		return titleService.removeTitle(id);
 	}
 	
-	@RequestMapping(value="/title",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/title/{title}",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Search Title", notes="Search Title by likeness of name")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Title> getTitleByTitle(@RequestParam(required=true,value="title") String title) {
+	public List<Title> getTitleByTitle(@PathVariable("title") String title) {
 		return titleService.getTitleBySearchTerm(title);
 	}
 	
-	@RequestMapping(value="/year",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/year/{year}",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Title by Year", notes="Get All Title in a particular Year")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Title> getTitleByYear(@RequestParam(required=true,value="year") int year) {
+	public List<Title> getTitleByYear(@PathVariable("year") int year) {
 		return titleService.getTitleByYear(year);
 	}
 	
-	@RequestMapping(value="/genre",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/genre/{genre}",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Title by Genre", notes="Get All Title in a particular Genre")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Title> getTitleByGenre(@RequestParam(required=true,value="genre") String genre) {
+	public List<Title> getTitleByGenre(@PathVariable("genre") String genre) {
 		return titleService.getTitleByGenre(genre);
 	}
 	
-	@RequestMapping(value="/type", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/type/{type}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find Title by Type", notes="Get All Title in a particular Type")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public List<Title> getTitleByType(@RequestParam(required=true,value="type") String type) {
+	public List<Title> getTitleByType(@PathVariable("type") String type) {
 		return titleService.getTitleByType(type);
 	}
 }

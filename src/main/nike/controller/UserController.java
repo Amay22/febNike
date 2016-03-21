@@ -52,7 +52,7 @@ public class UserController {
     private static class LoginResponse {
         public String token;
 
-        public LoginResponse(final String token) {
+        public LoginResponse(final String token){
             this.token = token;
         }
     }
@@ -72,22 +72,22 @@ public class UserController {
             .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
     }
 	
-	@RequestMapping(value="/id",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/id/{id}",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find User By Id", notes="Returns a user by it's id exists.")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public User findUserId(@RequestParam(required=true,value="id") int id) throws UserNotFoundException {
+	public User findUserId(@PathVariable("id") int id) throws UserNotFoundException {		
 		return userService.findUserById(id);
 	}
 	
-	@RequestMapping(value="/email",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/email/{email}/{ext}",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find User By Email", notes="Returns a user by it's Email exists.")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public User findUserEmail(@RequestParam(required=true,value="email") String email) throws UserNotFoundException {
-		return userService.findUserByEmail(email);
+	public User findUserEmail(@PathVariable("email") String email, @PathVariable("ext") String ext) throws UserNotFoundException {
+		return userService.findUserByEmail(email + "." + ext);
 	}
 	
 	@RequestMapping(value="/new", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -99,22 +99,22 @@ public class UserController {
 		return userService.createUser(user);
 	}
 	
-	@RequestMapping(value="/update", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/update/{id}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Update User", notes="Update an existing user")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public User update (@RequestParam(required=true,value="id") int id, @RequestBody User user) throws UserNotFoundException {
+	public User update (@PathVariable("id") int id, @RequestBody User user) throws UserNotFoundException {
 		return userService.updateUser(id, user);
 	}
 	
-	@RequestMapping(value="/delete", method=RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Delete User", notes="Delete an existing user")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public void delete (@RequestParam(required=true,value="id") int id) throws UserNotFoundException {
+	public void delete (@PathVariable("id") int id) throws UserNotFoundException {
 		userService.deleteUser(id);
 	}
 }
