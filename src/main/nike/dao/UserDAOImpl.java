@@ -1,5 +1,6 @@
 package nike.dao;
 
+import nike.model.Title;
 import nike.model.User;
 
 import java.util.List;
@@ -31,9 +32,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public User findUserByEmail(String email) {
-		TypedQuery<User> query = em.createNamedQuery("User.findByEmail", User.class);
-    	query.setParameter("pEmail", email);
-    	List<User> users = query.getResultList();
+    	List<User> users  = em.createQuery("FROM User WHERE email like :email").setParameter("email", email).getResultList();    	
     	if(users != null && users.size() == 1) {
     		return users.get(0);
     	}else {
@@ -56,6 +55,4 @@ public class UserDAOImpl implements UserDAO {
 	public void deleteUser (User user) {
 		em.remove(user);
 	}
-
-	
 }

@@ -51,7 +51,7 @@ public class TitleDAOImpl implements TitleDAO {
 
 	@Override
 	public List<Title> getTitleBySearchTerm(String title) {
-		return (List<Title>) em.createQuery("FROM Title  WHERE title like :title").setParameter("title", '%' + title + '%').getResultList();
+		return (List<Title>) em.createQuery("FROM Title WHERE title like :title").setParameter("title", "%" + title + "%").getResultList();
 	}
 
 	@Override
@@ -61,11 +61,11 @@ public class TitleDAOImpl implements TitleDAO {
 
 	@Override
 	public List<Title> getTitleByType(String type) {
-		return (List<Title>) em.createQuery("FROM Title WHERE type = :type").setParameter("type", type).getResultList();
+		return (List<Title>) em.createQuery("FROM Title WHERE type like :type").setParameter("type", type).getResultList();
 	}
 
 	@Override
 	public List<Title> getTitleByGenre(String genre) {
-		return (List<Title>) em.createQuery("FROM Title WHERE genre = :genre").setParameter("genre", genre).getResultList();
+		return (List<Title>) em.createQuery("FROM Title WHERE genre like :genre").setParameter("genre", genre).getResultList();
 	}
 }

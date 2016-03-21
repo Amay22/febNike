@@ -55,11 +55,11 @@ public class CommentsDAOImpl implements CommentsDAO {
 
 	@Override
 	public void removeCommentsForUser(int userId) {
-		em.createQuery("DELETE Comments WHERE user_Id = :userId").setParameter("userId", userId);
+		em.createQuery("DELETE FROM Comments WHERE user_Id = :userId").setParameter("userId", userId).executeUpdate();
 	}
 
 	@Override
 	public void removeCommentsForTitle(int titleId) {
-		em.createQuery("DELETE Comments WHERE title_Id = :titleId").setParameter("titleId", titleId);
+		em.createQuery("DELETE FROM Comments WHERE title_Id = :titleId").setParameter("titleId", titleId).executeUpdate();
 	}
 }
