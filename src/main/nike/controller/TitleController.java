@@ -48,31 +48,31 @@ public class TitleController {
 		return titleService.getTitleById(id);
 	}
 
-	@RequestMapping(value="/new", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/new/{token}", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Create Title", notes="Create and return Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title addTitle(@RequestBody Title title) throws TitleBadRequestException{
+	public Title addTitle(@RequestBody Title title, @PathVariable("token") int token) throws TitleBadRequestException{
 		return titleService.addTitle(title);	
 	}
 	
-	@RequestMapping(value="/update", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/update/{token}", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Update Title", notes="Update an existing Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title updateTitle(@RequestBody Title title) throws TitleNotFoundException, TitleBadRequestException{
+	public Title updateTitle(@RequestBody Title title, @PathVariable("token") int token) throws TitleNotFoundException, TitleBadRequestException{
 		return titleService.updateTitle(title);
 	}
 	
-	@RequestMapping(value="/delete/{id}",method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/delete/{id}/{token}",method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Delete Title", notes="Delete an existing Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title deleteTitleById(@PathVariable("id") int id) throws TitleNotFoundException{
+	public Title deleteTitleById(@PathVariable("id") int id, @PathVariable("token") int token) throws TitleNotFoundException{
 		return titleService.removeTitle(id);
 	}
 	
