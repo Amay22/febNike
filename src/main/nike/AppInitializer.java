@@ -4,7 +4,6 @@ package nike;
 import javax.servlet.Filter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
@@ -24,7 +23,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	
 	@Override
     protected Filter[] getServletFilters() {
-        Filter [] singletonCorsFilter = { new CORSFilter() };
-        return singletonCorsFilter;
+        Filter [] singletonJWTFilter = { new JwtFilter() };
+        return singletonJWTFilter;
     }
 }

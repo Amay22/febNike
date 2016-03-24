@@ -51,9 +51,13 @@ public class UserController {
     @SuppressWarnings("unused")
     private static class LoginResponse {
         public String token;
+        public String role;
+        public int id;
 
-        public LoginResponse(final String token){
+        public LoginResponse(final String token, final String role, final int id){
             this.token = token;
+            this.role = role;
+            this.id = id;
         }
     }
 	
@@ -67,9 +71,13 @@ public class UserController {
         if (user == null) {
             throw new UserUnathorizedException();
         }
+        String role = "user";
+        if(login.email.equals(login.email)){
+        	role = "admin";
+        }
         return new LoginResponse(Jwts.builder().setSubject(login.email)
-            .claim("roles", "user").setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
+            .claim("role", role).setIssuedAt(new Date())
+            .signWith(SignatureAlgorithm.HS256, "secretkey").compact(), role , user.getId());
     }
 	
 	@RequestMapping(value="/id/{id}",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
