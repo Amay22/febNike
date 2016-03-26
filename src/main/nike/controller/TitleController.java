@@ -2,6 +2,8 @@ package nike.controller;
 
 import java.util.List;
 
+import javax.servlet.ServletException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -48,31 +53,57 @@ public class TitleController {
 		return titleService.getTitleById(id);
 	}
 
-	@RequestMapping(value="/new/{token}", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/new/{token}/", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Create Title", notes="Create and return Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title addTitle(@RequestBody Title title, @PathVariable("token") int token) throws TitleBadRequestException{
+	public Title addTitle(@RequestBody Title title, @PathVariable("token") String token) throws TitleBadRequestException{
+		if(token == null){
+			throw new TitleBadRequestException();
+		}
+		try {
+            final Claims claims = Jwts.parser().setSigningKey("secretkey")
+                .parseClaimsJws(token).getBody();  
+            if(!claims.get("role").equals("admin") ){
+            	throw new TitleBadRequestException();            	
+            }
+        }
+        catch (final SignatureException e) {
+        	throw new TitleBadRequestException();
+        }		
 		return titleService.addTitle(title);	
 	}
 	
-	@RequestMapping(value="/update/{token}", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/update", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Update Title", notes="Update an existing Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=400, message="Bad Request"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title updateTitle(@RequestBody Title title, @PathVariable("token") int token) throws TitleNotFoundException, TitleBadRequestException{
+	public Title updateTitle(@RequestBody Title title) throws TitleNotFoundException, TitleBadRequestException{
 		return titleService.updateTitle(title);
 	}
 	
-	@RequestMapping(value="/delete/{id}/{token}",method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/delete/{id}/{token}/",method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Delete Title", notes="Delete an existing Title")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 		     			  @ApiResponse(code=404, message="Not Found"),
 		     			  @ApiResponse(code=500, message="Internal Server Error")})
-	public Title deleteTitleById(@PathVariable("id") int id, @PathVariable("token") int token) throws TitleNotFoundException{
+	public Title deleteTitleById(@PathVariable("id") int id, @PathVariable("token") String token) throws TitleNotFoundException{
+		if(token == null){
+			throw new TitleNotFoundException();
+		}
+		try {
+            final Claims claims = Jwts.parser().setSigningKey("secretkey")
+                .parseClaimsJws(token).getBody();  
+            if(!claims.get("role").equals("admin") ){
+            	throw new TitleNotFoundException();            	
+            }
+        }
+        catch (final SignatureException e) {
+        	throw new TitleNotFoundException();
+        }
 		return titleService.removeTitle(id);
 	}
 	

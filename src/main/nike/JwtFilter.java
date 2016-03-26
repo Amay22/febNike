@@ -24,11 +24,11 @@ public class JwtFilter extends GenericFilterBean {
     public void doFilter(final ServletRequest req,
                          final ServletResponse res,
                          final FilterChain chain) throws IOException, ServletException {
-        final HttpServletRequest request = (HttpServletRequest) req;
-        String uri = request.getRequestURI().toString();
+        final HttpServletRequest request = (HttpServletRequest) req;       
+        String uri = request.getRequestURI().toString();        
         if(uri.contains("/delete/") || uri.contains("titles/new/") || uri.contains("titles/update/")){
-	
 	        final String authHeader = request.getHeader("Authorization");
+	        
 	        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 	            throw new ServletException("Missing or invalid Authorization header.");
 	        }
@@ -38,7 +38,6 @@ public class JwtFilter extends GenericFilterBean {
 	        try {
 	            final Claims claims = Jwts.parser().setSigningKey("secretkey")
 	                .parseClaimsJws(token).getBody();
-	            System.out.println("inininnnininnininin" + claims.get("role"));
 	            if(!claims.get("roles").equals("admin") ){
 	            	throw new ServletException("Not an Admin Access Denied");
 	            }

@@ -89,13 +89,13 @@ public class UserController {
 		return userService.findUserById(id);
 	}
 	
-	@RequestMapping(value="/email/{email}/{ext}",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/email",method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value="Find User By Email", notes="Returns a user by it's Email exists.")
 	@ApiResponses(value={ @ApiResponse(code=200, message="Success"),
 						  @ApiResponse(code=404, message="Not Found"),
 						  @ApiResponse(code=500, message="Internal Server Error")})
-	public User findUserEmail(@PathVariable("email") String email, @PathVariable("ext") String ext) throws UserNotFoundException {
-		return userService.findUserByEmail(email + "." + ext);
+	public User findUserEmail(@PathVariable("email") String email) throws UserNotFoundException {
+		return userService.findUserByEmail(email);
 	}
 	
 	@RequestMapping(value="/new", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)

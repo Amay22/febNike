@@ -8,7 +8,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] {AppConfig.class, SwaggerConfig.class, JPAConfig.class, JwtFilter.class};
+		return new Class[] {AppConfig.class, SwaggerConfig.class, JPAConfig.class};
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	
 	@Override
     protected Filter[] getServletFilters() {
-        Filter [] singletonJWTFilter = { new JwtFilter() };
+        Filter [] singletonJWTFilter = { new CORSFilter() };
         return singletonJWTFilter;
     }
 }
